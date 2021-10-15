@@ -8,17 +8,31 @@ var refreshList = function() {
         dataType: 'json',
         success: function (response, textStatus) {
 
+            console.log(response);
+
         $('.do-list').html('');
 
         response.tasks.forEach(function (item) {
 
             var task = item.content;
             var taskID = item.id;
+            var completed = item.completed;
 
-            $('.do-list').append('<li id="' + 
-            taskID + '" class="list-group-item taskItem"><button class="btn btn-outline-primary d-inline checkButton"><i class="fas fa-check"></i></button><div class="m-3 taskText d-inline h5">' + 
-            task + 
-            '</div><button class="btn btn-danger d-inline float-right delete""><i class="fas fa-times"></i></button></li>');
+            if (!completed) {
+
+                $('.do-list').append('<li id="' + 
+                taskID + '" class="list-group-item taskItem"><button class="btn btn-outline-primary d-inline checkButton"><i class="fas fa-check"></i></button><div class="m-3 taskText d-inline h5">' + 
+                task + 
+                '</div><button class="btn btn-danger d-inline float-right delete""><i class="fas fa-times"></i></button></li>');
+
+            } else {
+
+                $('.do-list').append('<li id="' + 
+                taskID + '" class="list-group-item taskItem list-group-item-dark"><button class="btn btn-outline-primary d-inline checkButton btn-outline-success"><i class="fas fa-check"></i></button><div class="m-3 taskText d-inline h5">' + 
+                task + 
+                '</div><button class="btn btn-danger d-inline float-right delete""><i class="fas fa-times"></i></button></li>');
+
+            }
 
         });
 
@@ -33,7 +47,7 @@ var refreshList = function() {
 
 //function to add tasks
 
-var addTask = function () {
+$(document).on('click', '.btn.addTask', function (event) {
 
     var input = $('input');
 
@@ -63,9 +77,9 @@ var addTask = function () {
 
     }
 
-}
+});
 
-//on delete button - delete things
+//on delete button - delete thing
 
 $(document).on('click', '.btn.delete', function (event) {
 
@@ -87,19 +101,70 @@ $(document).on('click', '.btn.delete', function (event) {
 
 });
 
-//call function on document load
+//function to mark complete or active
+//logic: on click > check item with get request > if completed is false set to true, else set to false > refresh list
+
+$(document).on('click', '.btn.checkButton', function (event) {
+
+    var item = $(this).closest('li');
+    var id = item.attr("id");
+
+    $.ajax({
+            type: 'GET',
+            url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks/' + id + '?api_key=163',
+            dataType: 'json',
+            success: function (response, textStatus) {
+    
+                if (response.task.completed) {
+
+                    $.ajax({
+                        type: 'PUT',
+                        url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks/'+ id +'/mark_active?api_key=163',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        success: function (response, textStatus) {
+
+                            refreshList();
+            
+                        },
+                        error: function (request, textStatus, errorMessage) {
+                          console.log(errorMessage);
+                        }
+                      });
+            
+                } else {
+            
+                    $.ajax({
+                        type: 'PUT',
+                        url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks/'+ id +'/mark_complete?api_key=163',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        success: function (response, textStatus) {
+
+                            refreshList();
+            
+                        },
+                        error: function (request, textStatus, errorMessage) {
+                          console.log(errorMessage);
+                        }
+                      });
+            
+                };
+
+    
+            },
+            error: function (request, textStatus, errorMessage) {
+              console.log(errorMessage);
+            }
+    });
+
+});
+
+
+//call refresh function on document load
 
 $(document).ready(function () {
 
     refreshList();
-
-});
-
-//function to toggle check on task
-
-$(document).on('click', '.checkButton', function (event){
-
-    $(this).closest('li').toggleClass("list-group-item-dark");
-    $(this).toggleClass("btn-outline-success");
 
 });
