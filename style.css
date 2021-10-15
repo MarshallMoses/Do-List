@@ -1,0 +1,9 @@
+body {
+    background-color: #dfe6e9;
+}
+
+.list-group {
+    width: auto;
+    max-width: 520px;
+    margin: 1rem auto;
+}

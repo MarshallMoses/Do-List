@@ -14,13 +14,29 @@
       src="https://code.jquery.com/jquery-3.3.1.min.js"
       integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
       crossorigin="anonymous"></script>
-    <script src="/script.js"></script>
+    <script src="script.js"></script>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link href="/style.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
   </head>
 
   <body>
+    
+    <div class="list-group">
+        <h3>To Do List</h3>
+    </div>
+
+    <ul class="list-group do-list">
+    </ul>
+
+    <div class="list-group">
+        <div class="list-group-item">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="What Needs Doing?">
+                <button class="btn btn-success" type="button" onclick="addTask()">Add Item</button>
+            </div>
+        </div>
+    </div>
 
   </body>
   
