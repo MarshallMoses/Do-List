@@ -8,9 +8,9 @@ var refreshList = function() {
         dataType: 'json',
         success: function (response, textStatus) {
 
-        //sort response by id
+        //sort response by created_at date
 
-        var sortedResponse = response.tasks.slice().sort((a, b) => b.id - a.id);
+        var sortedResponse = response.tasks.slice().sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
         $('.do-list').html('');
 
