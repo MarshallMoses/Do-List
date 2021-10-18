@@ -8,11 +8,13 @@ var refreshList = function() {
         dataType: 'json',
         success: function (response, textStatus) {
 
-            console.log(response);
+        //sort response by id
+
+        var sortedResponse = response.tasks.slice().sort((a, b) => b.id - a.id);
 
         $('.do-list').html('');
 
-        response.tasks.forEach(function (item) {
+        sortedResponse.forEach(function (item) {
 
             var task = item.content;
             var taskID = item.id;
